@@ -2,7 +2,6 @@ package org.example;
 
 import java.sql.*;
 
-import com.mysql.cj.jdbc.ConnectionImpl;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.util.Random;
 
@@ -41,14 +40,14 @@ public class Database {
             }
         }
 
-        //method to generate random 4 digits unique numbers for the prisoner id
-        public static int generateRandomId(){
+        //generate random 4 digits unique numbers for the prisoner id
+        public int generateRandomId(){
             Random random = new Random();
             boolean isUnique = false;
             String findQuery = "SELECT * FROM prisoner WHERE prisoner_id = ? ";
             int uniqueId = 0;
 
-            try(Connection connection = new ConnectionImpl(findQuery);
+            try(Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUserName, jdbcPassword);
                 PreparedStatement findStatement = connection.prepareStatement(findQuery)){
 
                 while (!isUnique){
@@ -63,8 +62,27 @@ public class Database {
                     }
                 }
 
+            } catch (SQLException e) {
+                System.out.println("Database error : " + e.getMessage());
             }
             return uniqueId;//return the generated four random numbers
+        }
+    }
+    /*
+    * Class to Handle AdminDatabaseLogic
+    *
+    */
+    public class AdminDatabaseHandler{
+        //validate admin information
+        public void verifyAdminInfo(int adminId,String username, String password){
+            String query = "SELECT * FROM admin WHERE username = ?";
+
+            try(Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUserName, jdbcPassword);
+                PreparedStatement statement = connection.prepareStatement(query)){
+
+            }catch (SQLException e){
+                System.out.println("Database error : " + e.getMessage());
+            }
         }
     }
 }
