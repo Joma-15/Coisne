@@ -2,6 +2,7 @@ package org.example;
 
 import java.sql.*;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.util.Random;
 
@@ -72,16 +73,12 @@ public class Database {
     * Class to Handle AdminDatabaseLogic
     *
     */
-    public class AdminDatabaseHandler{
-        //validate admin information
-        public void verifyAdminInfo(int adminId,String username, String password){
-            String query = "SELECT * FROM admin WHERE username = ?";
+    public class AdminDatabaseHandler {
+        public void validateAdminInformation(int cellId, String username, String password){
+            String query = "SELECT c.cell_id, a.username " + "FROM cell c JOIN admin a on a.admin_id = c.admin_id";
 
-            try(Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUserName, jdbcPassword);
-                PreparedStatement statement = connection.prepareStatement(query)){
+            try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUserName,jdbcPassword)){
 
-            }catch (SQLException e){
-                System.out.println("Database error : " + e.getMessage());
             }
         }
     }
